@@ -1,13 +1,15 @@
-# FoodFlow
+# FoodFlow — Food Delivery System
 
-FoodFlow is a C++ food delivery system built as a learning project to practise object-oriented programming and low-level design (LLD).
+FoodFlow is a food delivery application project built to practise **C++ object-oriented programming, low-level design (LLD), and React frontend development**.
 
-It models a basic food ordering workflow, including restaurant menus, shopping carts, order placement, simulated payments, order status updates, and customer notifications.
+The project models a simplified food ordering workflow, from browsing restaurant menus and managing a cart to placing orders, processing simulated payments, and tracking order status. It includes a C++ implementation of the core business rules and a separate React frontend demo.
 
 ## Features
 
+### C++ Core
+
 - Restaurant menus with item availability checks
-- Shopping carts with quantity validation and total calculation
+- Shopping cart with quantity validation and total calculation
 - Prevention of mixing items from different restaurants in one cart
 - Order placement with basic validation
 - Simulated UPI and card payments
@@ -16,19 +18,40 @@ It models a basic food ordering workflow, including restaurant menus, shopping c
 - Observer-based notifications when order status changes
 - Automated tests for core business rules and edge cases
 
+### React Frontend
+
+- Browse sample restaurants and menu items
+- Search restaurants
+- Add and remove items from the cart
+- Prevent mixing items from different restaurants
+- Enter customer and delivery details at checkout
+- Simulate a payment and display order confirmation
+- View order history and cancel eligible orders
+- Persist supported demo data in browser local storage
+- Responsive layout for different screen sizes
+
 ## Design Concepts
 
-- **Encapsulation:** Models keep their data and validation logic together.
+- **Encapsulation:** Models keep related data and validation logic together.
 - **Composition:** A restaurant maintains its menu items.
 - **Strategy pattern:** UPI and card payments use a common payment interface.
 - **Observer pattern:** Observers receive notifications when an order's status changes.
 - **Separation of responsibilities:** Order creation and payment processing are handled by separate services.
+- **Business rule validation:** The application checks cart contents, quantities, payment outcomes, and order status transitions.
 
 ## Tech Stack
 
+**C++ Core**
 - C++17
 - CMake
 - CTest
+
+**Frontend**
+- React
+- JavaScript
+- Vite
+- CSS
+- Browser local storage for demo persistence
 
 ## Project Structure
 
@@ -46,14 +69,25 @@ foodflow/
 │   └── diagrams/
 │       ├── class-diagram.md
 │       └── checkout-flow.md
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
 ├── CMakeLists.txt
 ├── .gitignore
 └── README.md
 ```
 
-## Build and Run
+## Run the C++ Application
 
 Make sure CMake and a C++17-compatible compiler are installed.
+
+From the project root:
 
 ```bash
 cmake -S . -B build
@@ -61,11 +95,38 @@ cmake --build build
 ./build/foodflow
 ```
 
-## Run Tests
+## Run the C++ Tests
+
+From the project root:
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
+To run the test executable directly:
 
 ```bash
 ./build/test_foodflow
-ctest --test-dir build --output-on-failure
+```
+
+## Run the React Frontend
+
+Make sure Node.js and npm are installed.
+
+From the project root:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open the local URL printed by Vite, usually `http://localhost:5173`.
+
+To verify a production build:
+
+```bash
+npm run build
 ```
 
 ## Design Documentation
@@ -77,15 +138,23 @@ GitHub can render the Mermaid diagrams in these files.
 
 ## Current Limitations
 
-- Data is stored in memory and is lost when the program exits.
+- The C++ core and React frontend are separate implementations; the frontend does not currently call the C++ code through an API.
+- The frontend uses sample restaurant and menu data.
 - Payments are simulated; no real payment provider is connected.
-- The project does not include a web or mobile interface.
-- Order creation and payment processing are separate steps in the current demo.
+- Browser demo data is stored locally and is not shared across devices.
+- There is no backend API, user authentication, or database integration.
+- The C++ application stores its data in memory, so that data is lost when the program exits.
 
 ## Possible Improvements
 
-- Add a dedicated checkout service to coordinate order placement and payment.
+- Connect the React frontend to a backend API.
+- Add persistent storage using a database.
+- Coordinate order creation and payment through a dedicated checkout service.
+- Add user authentication and customer accounts.
 - Improve payment failure and order lifecycle handling.
-- Add more automated tests for card payments and invalid inputs.
-- Add order history and persistent storage.
+- Expand automated tests for additional business rules and edge cases.
 - Improve UML documentation as the design evolves.
+
+## Project Goal
+
+FoodFlow is a learning project focused on understanding and demonstrating object-oriented design, common design patterns, business rule validation, testing, and frontend development. It is not intended to process real orders or payments.
