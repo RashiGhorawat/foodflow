@@ -165,6 +165,18 @@ int main() {
         "Preparing order cannot be cancelled"
     );
 
+    TestObserver cancellationObserver;
+    auto observedOrder = service.placeOrder(customer, cart);
+
+    observedOrder->addObserver(&cancellationObserver);
+    observedOrder->updateStatus(OrderStatus::Cancelled);
+
+    check(
+        cancellationObserver.updates.size() == 1 &&
+        cancellationObserver.updates[0].find("Cancelled") != std::string::npos,
+        "Observer receives cancellation notification"
+    );
+
     std::cout << "\n-----------------------------\n";
     std::cout << "Passed: " << passed << '\n';
     std::cout << "Failed: " << failed << '\n';
