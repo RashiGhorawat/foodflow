@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -8,6 +9,8 @@
 #include "../src/models/Customer.h"
 #include "../src/models/Order.h"
 #include "../src/services/OrderService.h"
+#include "../src/services/PaymentService.h"
+#include "../src/strategies/PaymentStrategy.h"
 
 int passed = 0;
 int failed = 0;
@@ -95,6 +98,21 @@ int main() {
         [&] { service.placeOrder(customer, emptyCart); },
         "Cannot place an order with an empty cart"
     );
+
+    auto failedOrder = service.placeOrder(customer, cart);
+
+    PaymentService paymentService;
+    UPIPayment failedUPI(false);
+
+    bool paymentResult = paymentService.processPayment(
+        failedOrder->getTotal(), failedUPI
+    );
+
+    check(!paymentResult,
+          "Failed payment returns false");
+
+    check(failedOrder->getStatus() == OrderStatus::Placed,
+          "Failed payment leaves order unconfirmed");
 
     auto order = service.placeOrder(customer, cart);
     TestObserver observer;

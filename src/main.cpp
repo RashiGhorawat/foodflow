@@ -30,15 +30,17 @@ int main() {
     std::cout << "Order status: " << order->getStatusName() << "\n\n";
 
     PaymentService paymentService;
-    UPIPayment upi;
+    UPIPayment upi(false);
 
     bool paymentSuccessful =
         paymentService.processPayment(order->getTotal(), upi);
 
-    if (paymentSuccessful) {
-        order->updateStatus(OrderStatus::Confirmed);
-        order->updateStatus(OrderStatus::Preparing);
-    }
+   if (paymentSuccessful) {
+    order->updateStatus(OrderStatus::Confirmed);
+    order->updateStatus(OrderStatus::Preparing);
+} else {
+    std::cout << "Order was not confirmed because payment failed.\n";
+}
 
     std::cout << "\nFinal status: " << order->getStatusName() << '\n';
 
