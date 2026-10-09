@@ -135,6 +135,36 @@ int main() {
         "Order rejects an invalid status transition"
     );
 
+    auto placedOrder = service.placeOrder(customer, cart);
+
+    placedOrder->updateStatus(OrderStatus::Cancelled);
+
+    check(placedOrder->getStatus() == OrderStatus::Cancelled,
+          "Placed order can be cancelled");
+
+    checkThrows(
+        [&] { placedOrder->updateStatus(OrderStatus::Confirmed); },
+        "Cancelled order cannot be confirmed"
+    );
+
+    auto confirmedOrder = service.placeOrder(customer, cart);
+
+    confirmedOrder->updateStatus(OrderStatus::Confirmed);
+    confirmedOrder->updateStatus(OrderStatus::Cancelled);
+
+    check(confirmedOrder->getStatus() == OrderStatus::Cancelled,
+          "Confirmed order can be cancelled");
+
+    auto preparingOrder = service.placeOrder(customer, cart);
+
+    preparingOrder->updateStatus(OrderStatus::Confirmed);
+    preparingOrder->updateStatus(OrderStatus::Preparing);
+
+    checkThrows(
+        [&] { preparingOrder->updateStatus(OrderStatus::Cancelled); },
+        "Preparing order cannot be cancelled"
+    );
+
     std::cout << "\n-----------------------------\n";
     std::cout << "Passed: " << passed << '\n';
     std::cout << "Failed: " << failed << '\n';
