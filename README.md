@@ -1,25 +1,27 @@
 # FoodFlow
 
-A C++ food delivery system built to explore object-oriented design and low-level system design concepts.
+FoodFlow is a C++ food delivery system built as a learning project to practise object-oriented programming and low-level design (LLD).
 
-FoodFlow models a basic food-ordering workflow: customers add menu items to a cart, place orders, make a simulated payment, and receive notifications when the order status changes.
+It models a basic food ordering workflow, including restaurant menus, shopping carts, order placement, simulated payments, order status updates, and customer notifications.
 
 ## Features
 
-- Restaurant menus and menu item availability
-- Customer and shopping cart models
-- Cart total calculation and restaurant consistency checks
-- Order placement and status transition validation
-- Simulated UPI and card payment strategies
-- Observer-based order status notifications
-- Automated tests for core behavior and edge cases
+- Restaurant menus with item availability checks
+- Shopping carts with quantity validation and total calculation
+- Prevention of mixing items from different restaurants in one cart
+- Order placement with basic validation
+- Simulated UPI and card payments
+- Order status transition validation
+- Order cancellation rules
+- Observer-based notifications when order status changes
+- Automated tests for core business rules and edge cases
 
 ## Design Concepts
 
-- **Encapsulation:** Models manage their own data and validation.
-- **Composition:** A restaurant maintains its menu.
-- **Strategy pattern:** Payment methods share a common interface.
-- **Observer pattern:** Subscribers are notified when order status changes.
+- **Encapsulation:** Models keep their data and validation logic together.
+- **Composition:** A restaurant maintains its menu items.
+- **Strategy pattern:** UPI and card payments use a common payment interface.
+- **Observer pattern:** Observers receive notifications when an order's status changes.
 - **Separation of responsibilities:** Order creation and payment processing are handled by separate services.
 
 ## Tech Stack
@@ -28,7 +30,30 @@ FoodFlow models a basic food-ordering workflow: customers add menu items to a ca
 - CMake
 - CTest
 
+## Project Structure
+
+```text
+foodflow/
+├── src/
+│   ├── models/
+│   ├── services/
+│   ├── strategies/
+│   ├── observers/
+│   └── main.cpp
+├── tests/
+│   └── test_foodflow.cpp
+├── docs/
+│   └── diagrams/
+│       ├── class-diagram.md
+│       └── checkout-flow.md
+├── CMakeLists.txt
+├── .gitignore
+└── README.md
+```
+
 ## Build and Run
+
+Make sure CMake and a C++17-compatible compiler are installed.
 
 ```bash
 cmake -S . -B build
@@ -43,16 +68,24 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-## Current Scope
+## Design Documentation
 
-FoodFlow is an in-memory learning project. Data is not persisted after the program exits, and payments are simulated rather than processed through a real payment provider.
+- [UML Class Diagram](docs/diagrams/class-diagram.md)
+- [Checkout Flow](docs/diagrams/checkout-flow.md)
 
-The project focuses on domain modeling, business rules, design patterns, and testable C++ code rather than a web or mobile interface.
+GitHub can render the Mermaid diagrams in these files.
 
-## Future Improvements
+## Current Limitations
 
-- Preserve an itemized snapshot in each order
-- Add a delivery assignment strategy
-- Improve payment failure and cancellation handling
-- Expand automated test coverage
-- Document class relationships and checkout flow with UML diagrams
+- Data is stored in memory and is lost when the program exits.
+- Payments are simulated; no real payment provider is connected.
+- The project does not include a web or mobile interface.
+- Order creation and payment processing are separate steps in the current demo.
+
+## Possible Improvements
+
+- Add a dedicated checkout service to coordinate order placement and payment.
+- Improve payment failure and order lifecycle handling.
+- Add more automated tests for card payments and invalid inputs.
+- Add order history and persistent storage.
+- Improve UML documentation as the design evolves.
